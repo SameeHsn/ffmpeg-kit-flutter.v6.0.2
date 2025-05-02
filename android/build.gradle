@@ -1,28 +1,29 @@
 buildscript {
     repositories {
+        maven { url 'https://www.arthenica.com/maven/release' }
         google()
         mavenCentral()
-        maven { url 'https://www.arthenica.com/maven/release' }
     }
+
     dependencies {
         classpath 'com.android.tools.build:gradle:8.1.0'
     }
 }
 
-// This is not always necessary with newer Gradle, but keep for compatibility
-allprojects {
+rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://www.arthenica.com/maven/release' }
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    // Set namespace for newer AGP compatibility
-    namespace 'com.arthenica.ffmpegkit.flutter'
+    // Conditional for compatibility with AGP <4.2.
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.arthenica.ffmpegkit.flutter'
+    }
 
     compileSdkVersion 33
 
@@ -38,11 +39,9 @@ android {
             minifyEnabled false
         }
     }
-
     lintOptions {
         disable 'GradleCompatible'
     }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
